@@ -1,5 +1,8 @@
 package com.udla.evaluaytor.businessdomain.evaluacion.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,6 +24,36 @@ public class FormularioEvaluacionImp implements FormularioEvaluacionService {
     @Autowired
     private FormularioEvaluacionRepository formularioEvaluacionRepository;
 
+    @Override
+    public List<FormularioEvaluacion> findAll() {
+        return formularioEvaluacionRepository.findAll();
+    }
+
+    @Override
+    public Optional<FormularioEvaluacion> findById(Long id) {
+        return formularioEvaluacionRepository.findById(id);
+    }
+
+    @Override
+    public FormularioEvaluacion save(FormularioEvaluacion formularioEvaluacion) {
+        return formularioEvaluacionRepository.save(formularioEvaluacion);
+    }
+
+    @Override
+    public FormularioEvaluacion updateById(Long id, FormularioEvaluacion formularioEvaluacion) {
+        if (formularioEvaluacionRepository.existsById(id)) {
+            formularioEvaluacion.setId(id);
+            return formularioEvaluacionRepository.save(formularioEvaluacion);
+        }
+        return null; // O lanzar una excepción
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        formularioEvaluacionRepository.deleteById(id);
+    }
+
+    @Override
     public FormularioEvaluacion getFormularioEvaluacion(Long formularioId) {
         // Obtén el FormularioEvaluacion desde el repositorio
         FormularioEvaluacion formularioEvaluacion = formularioEvaluacionRepository.findById(formularioId)
@@ -31,14 +64,14 @@ public class FormularioEvaluacionImp implements FormularioEvaluacionService {
         Long categoriaId = formularioEvaluacion.getCategoria_id();
         Long peritoId = formularioEvaluacion.getPerito_id();
 
-         // Llama al microservicio de proveedor para obtener la información del proveedor
-         WebClient webClient = webClientBuilder.build();
-         Mono<Proveedor> proveedorMono = webClient.get()
-             .uri("http://EMPRESA/api/empresa/proveedor/findbyid/{id}", proveedorId)
-             .retrieve()
-             .bodyToMono(Proveedor.class);
-         Proveedor proveedor = proveedorMono.block();
-         formularioEvaluacion.setProveedor(proveedor);
+        // Llama al microservicio de proveedor para obtener la información del proveedor
+        WebClient webClient = webClientBuilder.build();
+        Mono<Proveedor> proveedorMono = webClient.get()
+            .uri("http://EMPRESA/api/empresa/proveedor/findbyid/{id}", proveedorId)
+            .retrieve()
+            .bodyToMono(Proveedor.class);
+        Proveedor proveedor = proveedorMono.block();
+        formularioEvaluacion.setProveedor(proveedor);
 
         Mono<Categoria> categoriaMono = webClient.get()
             .uri("http://EMPRESA/api/empresa/categoria/findbyid/{id}", categoriaId)
