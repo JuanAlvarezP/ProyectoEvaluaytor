@@ -80,6 +80,7 @@ public class ProveedorImpl implements ProveedorService {
     }
 
     @Transactional
+    @Override
     public void deleteProveedorById(Long id) {
         if (!proveedorRepository.existsById(id)) {
             throw new RuntimeException("Proveedor no encontrado con id " + id);
