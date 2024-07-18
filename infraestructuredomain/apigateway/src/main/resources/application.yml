@@ -27,3 +27,8 @@ spring:
         uri: lb://evaluacion
         predicates:
         - Path=/api/evaluacion/**
+
+      - id: keycloak_service
+        uri: lb://infraestructure-keycloak
+        predicates:
+        - Path=/api/security/**

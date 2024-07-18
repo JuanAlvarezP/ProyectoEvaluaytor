@@ -6,7 +6,7 @@
     <groupId>com.udla.evaluaytor.infraestructuredomain</groupId>
     <artifactId>keycloak-adapter</artifactId>
     <version>1.0</version>
-    <name>kaycloakAdapter</name>
+    <name>keycloakAdapter</name>
     <description>KeycloackClient</description>
       
 	<parent>
